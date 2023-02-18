@@ -1,0 +1,51 @@
+on:
+  workflow_dispatch:
+    inputs:
+      vscode_version:
+        description: Target vscode version
+        default: ""
+        required: false
+
+name: Build
+
+jobs:
+  bulid:
+    runs-on: ubuntu-20.04
+    name: Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Checkout vscode
+        run: |
+          git -C vscode/ fetch --depth=1 origin ${{ github.event.inputs.vscode_version }}:${{ github.event.inputs.vscode_version }} --no-tags
+          git -C vscode/ checkout FETCH_HEAD
+        if: ${{ github.event.inputs.vscode_version != '' }}
+      - name: Set vscode commit
+        id: vscode-commit
+        run: echo "VSCODE_SHA=$(git -C vscode/ rev-parse HEAD)" >> $GITHUB_OUTPUT
+      - name: Cache vscode
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-vscode
+        with:
+          path: |
+            vscode/
+          key: ${{ env.cache-name }}-build-${{ steps.vscode-commit.outputs.VSCODE_SHA }}
+          restore-keys: ${{ env.cache-name }}-bulid-
+      - name: Install toolchains
+        run: |
+          sudo apt-get update -y \
+          && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y curl git zip build-essential g++ libx11-dev libxkbfile-dev libsecret-1-dev python-is-python3 \
+          && sudo bash -c 'curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs' \
+          && sudo apt-get -y clean \
+          && sudo rm -rf /var/lib/apt/lists/* \
+          && sudo npm install --global yarn
+      - name: Build vscode-web-min
+        run: BUILD_ROOT=$GITHUB_WORKSPACE bash ./build.sh
+      - name: Package vscode-web-min
+        uses: actions/upload-artifact@v3
+        with:
+          name: vscode-web-min
+          path: out/*.zip
