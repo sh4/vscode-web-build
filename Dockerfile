@@ -5,6 +5,7 @@ RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         curl \
         git \
+        zip \
         build-essential \
         g++ \
         libx11-dev \

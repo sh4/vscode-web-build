@@ -4,7 +4,7 @@ DOCKER := $(shell { command -v podman || command -v docker; })
 
 all:
 	$(DOCKER) build --tag vscode-web-build --file Dockerfile .
-	$(DOCKER) run --rm -it --name vscode-web-build -v ./:/app -w /app vscode-web
+	$(DOCKER) run --rm -it --name vscode-web-build -v ./:/app vscode-web-build
 
 clean:
 	git clean -xdf .
