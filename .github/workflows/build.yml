@@ -38,21 +38,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - name: Install toolchains
-        run: |
-          sudo apt-get update -y \
-          && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y curl git zip build-essential g++ libx11-dev libxkbfile-dev libsecret-1-dev python-is-python3 \
-          && sudo apt-get -y clean \
-          && sudo rm -rf /var/lib/apt/lists/* \
-          && echo "node $(node --version)" \
-          && echo "yarn $(yarn --version)"
       - name: Build vscode-web-min
         run: BUILD_ROOT=$GITHUB_WORKSPACE bash ./build.sh
+      - name: Set relesae tag
+        id: release-tag
+        run: echo "RELEASE_TAG=$(echo '${{ github.event.inputs.vscode_version }}' | sed -e 's/^\(refs\/\)\?tags\///g')" >> $GITHUB_OUTPUT
+        if: startsWith(${{ github.event.inputs.vscode_version }}, 'tags/')
       - name: Release vscdoe-web-min
         uses: softprops/action-gh-release@v1
-        if: ${{ github.event.inputs.vscode_version != '' }}
+        if: startsWith(${{ github.event.inputs.vscode_version }}, 'tags/')
         with:
-          name: ${{ github.event.inputs.vscode_version }}
-          tag_name: ${{ github.event.inputs.vscode_version }}
+          name: ${{ steps.release-tag.outputs.RELEASE_TAG }}
+          tag_name: ${{ steps.release-tag.outputs.RELEASE_TAG }}
           files: out/*.zip
           fail_on_unmatched_files: true
+

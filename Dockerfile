@@ -19,9 +19,9 @@ RUN apt-get update -y && \
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         nodejs \
+        yarn \
     && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && npm install --global yarn
+    && rm -rf /var/lib/apt/lists/*
 
 COPY build.sh ./
 
