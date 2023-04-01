@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
     inputs:
       vscode_version:
-        description: Target vscode version
+        description: VSCode version tag
         default: ""
         required: false
 
@@ -19,7 +19,7 @@ jobs:
           submodules: true
       - name: Checkout vscode
         run: |
-          git -C vscode/ fetch --depth=1 origin ${{ github.event.inputs.vscode_version }}:${{ github.event.inputs.vscode_version }} --no-tags
+          git -C vscode/ fetch --depth=1 origin refs/tags/${{ github.event.inputs.vscode_version }}:refs/tags/${{ github.event.inputs.vscode_version }} --no-tags
           git -C vscode/ checkout FETCH_HEAD
         if: ${{ github.event.inputs.vscode_version != '' }}
       - name: Set vscode commit
