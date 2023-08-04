@@ -12,7 +12,6 @@ RUN apt-get update -y && \
         libxkbfile-dev \
         libsecret-1-dev \
         python-is-python3 \
-        libsecret-1-dev \
         libkrb5-dev \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/*
