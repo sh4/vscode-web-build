@@ -37,7 +37,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.15.x'
       - name: Install toolchains
         run: |
           sudo apt-get update -y \
@@ -52,7 +52,7 @@ jobs:
         id: release-tag
         run: echo "RELEASE_TAG=$(echo '${{ github.event.inputs.vscode_version }}' | sed -e 's/^\(refs\/\)\?tags\///g')" >> $GITHUB_OUTPUT
         if: startsWith(${{ github.event.inputs.vscode_version }}, 'tags/')
-      - name: Release vscdoe-web-min
+      - name: Release vscode-web-min
         uses: softprops/action-gh-release@v1
         if: startsWith(${{ github.event.inputs.vscode_version }}, 'tags/')
         with:
