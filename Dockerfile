@@ -17,7 +17,7 @@ RUN apt-get update -y && \
     && rm -rf /var/lib/apt/lists/*
 
 # Install node.js and yarn
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         nodejs \
         yarn \
