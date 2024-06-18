@@ -35,9 +35,9 @@ jobs:
           key: ${{ env.cache-name }}-build-${{ steps.vscode-commit.outputs.VSCODE_SHA }}
           restore-keys: ${{ env.cache-name }}-bulid-
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'
+          node-version: '>=20.x'
       - name: Install toolchains
         run: |
           sudo apt-get update -y \
