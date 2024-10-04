@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Install toolchain and dependencies
 RUN apt-get update -y && \
@@ -16,11 +16,10 @@ RUN apt-get update -y && \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install node.js and yarn
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+# Install node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         nodejs \
-        yarn \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/*
 
