@@ -14,7 +14,7 @@ name: Build
 
 jobs:
   bulid:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-24.04
     name: Build
     steps:
       - name: Checkout
